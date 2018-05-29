@@ -112,5 +112,23 @@ namespace wfQuery_Test_harness {
 		private void OffClickButton_Click(object sender, EventArgs e) {
 			_[".TextBox"].Off("Click", new EventHandler(clickHandler));
 		}
+
+
+
+		private void button2_Click(object sender, EventArgs e) {
+			_[".TextBox"].Attr("is-alaska", (i,c) => {
+				return i % 2 == 0;
+			});
+			string result = string.Empty;
+			_[".TextBox"].Each((i, c) => 
+				{
+					result += i.ToString()
+					+ ": " + _[c].Attr("is-alaska").ToString()
+					+ "\\" + c.Name + "\r\n";
+				});
+			MessageBox.Show(result);
+		}
+
+
 	}
 }

@@ -26,67 +26,132 @@ namespace wfQuery {
 
 
 
-		public List<object> Attr(string name) {
+		public object Attr(string name) {
 			return Attr<object>(name);
 		}
 
-		public List<T> Attr<T>(string name) {
-			List<T> result = new List<T>();
+		public T Attr<T>(string name) {
+			Control control = Results.First();
+			IAttributeProvider provider = wfQueryContext.DefaultAttributeProvider;
+			T value = default(T);
+
+			if (provider.HasAttributeValue(control, name)) {
+				value = provider.GetAttributeValue<T>(control, name);
+			} else {
+				value = GetPropertyValue<T>(control, name);
+			}
+			return value;
+		}
+
+		/// <summary>
+		/// Return the property value specified by <para>name</para>.
+		/// If no property by that name is found, then return the attribute by that name.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="name">Name of the property to query.</param>
+		/// <returns>Value of the requested property.</returns>
+		public T Prop<T>(string name) {
+			T result = default(T);
 			if (0 == Length) { return result; }
 
-			foreach (Control control in Results) {
-				//PropertyInfo property = typeof(T).GetProperty(name);
-				PropertyInfo property = _wfQuery
-					.GetPropertyResolver(control.GetType())
-					.GetPropertyInfo(control.GetType(), name);
+			Control control = Results.First();
+			PropertyInfo property = GetProperty(control, name);
 
-				if (null != property) {
-					T value = (T)property.GetValue(control);
-					result.Add(value);
-				} else {
-					//	somehow set a pseudo-property...
-				}
+			if (null != property) {
+				T value = (T)property.GetValue(control);
+				result = value;
+			} else {
+				return Attr<T>(name);
 			}
 
 			return result;
 		}
 
-		[Obsolete]
-		public List<T> Prop<T>(string name) {
-			return Attr<T>(name);
+
+
+		internal PropertyInfo GetProperty(Control control, string name) {
+			PropertyInfo property = _wfQuery
+				.GetPropertyResolver(control.GetType())
+				.GetPropertyInfo(control.GetType(), name);
+
+			return property;
+		}
+
+
+
+		internal T GetPropertyValue<T>(Control control, string name) {
+			T result = default(T);
+			PropertyInfo property = GetProperty(control, name);
+			if (null != property) {
+				result = (T)property.GetValue(control);
+			}
+			return result;
 		}
 
 
 
 		public wfQueryControlSelectorResult Attr<T>(string name, T value) {
 			if (0 == Length) { return this; }
+			IAttributeProvider provider = wfQueryContext.DefaultAttributeProvider;
 
-			try {
-				_wfQuery.Control.SuspendLayout();
-				foreach (Control control in Results) {
-					//control.GetType().GetProperty(name)?.SetValue(control, value);
-					_wfQuery
-						.GetPropertyResolver(control.GetType())
-						.GetPropertyInfo(control.GetType(), name)
-							?.SetValue(control, value);
+			_wfQuery.Control.SuspendLayout();
+			foreach (Control control in Results) {
+				PropertyInfo property = GetProperty(control, name);
+				if (null == property) {
+					provider.SetAttributeValue(control, name, value);
+				} else {
+					property.SetValue(control, value);
 				}
-			} catch (Exception ex) { } finally {
-				_wfQuery.Control.ResumeLayout();
 			}
+			_wfQuery.Control.ResumeLayout();
+
+			return this;
+		}
+
+		public wfQueryControlSelectorResult Attr<T>(string name, Func<int, Control, T> func) {
+			if (0 == Length) { return this; }
+			IAttributeProvider provider = wfQueryContext.DefaultAttributeProvider;
+			LinkedListNode<Control> node = Results.First;
+
+			_wfQuery.Control.SuspendLayout();
+			for (int index = 0; index < Length; index++) {
+				Control control = node.Value;
+				PropertyInfo property = GetProperty(control, name);
+				
+				if (null == property) {
+					provider.SetAttributeValue(control, name, func(index, control));
+				} else {
+					property.SetValue(control, func(index, control));
+				}
+				node = node.Next;
+			}
+			_wfQuery.Control.ResumeLayout();
 
 			return this;
 		}
 
 		/// <summary>
-		/// Alias for Attr(name, value)
+		/// Sets the property value.  If property can not be found, sets the attribute value.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="name"></param>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		[Obsolete]
 		public wfQueryControlSelectorResult Prop<T>(string name, T value) {
-			return Attr(name, value);
+			if (0 == Length) { return this; }
+
+			_wfQuery.Control.SuspendLayout();
+			foreach (Control control in Results) {
+				PropertyInfo property = GetProperty(control, name);
+				if (null != property) {
+					property.SetValue(control, value);
+				} else {
+					Attr(name, value);
+				}
+			}
+			_wfQuery.Control.ResumeLayout();
+
+			return this;
 		}
 
 

@@ -19,7 +19,8 @@ namespace wfQuery
 
 		public PropertyInfo GetPropertyInfo(Type type, string propertyName) {
 			if(!_structureCache.ContainsKey(type)) { CacheStructure(type); }
-
+			if (!_structureCache[type].ContainsKey(propertyName)) { return null; }
+			
 			return _structureCache[type][propertyName];
 		}
 

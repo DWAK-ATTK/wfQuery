@@ -9,9 +9,12 @@ namespace wfQuery {
 		internal event EventHandler<ControlEventArgs> ControlRemoved;
 
 		public static IPropertyResolver DefaultPropertyResolver { get; set; } = new ReflectionPropertyResolver();
+		public static IAttributeProvider DefaultAttributeProvider { get; set; } = new InMemoryAttributeProvider();
 
 		protected Control _control = null;
 		protected Dictionary<Type, IPropertyResolver> _propertyResolvers = new Dictionary<Type, IPropertyResolver>();
+
+		
 
 		public wfQueryContext(Control control) : base() {
 			_control = control ?? throw new NullReferenceException("control can not be null.");
@@ -45,11 +48,16 @@ namespace wfQuery {
 
 		private void _control_ControlRemoved(object sender, ControlEventArgs e) {
 			ControlRemoved?.Invoke(_control, e);
+			UnhookControlEvents(e.Control);
 		}
 
 		private void _control_ControlAdded(object sender, ControlEventArgs e) {
+			HookupControlEvents(e.Control);
 			ControlAdded?.Invoke(_control, e);
+			
 		}
+
+
 
 		public void AddPropertyResolver(Type type, IPropertyResolver propertyResolver) {
 			if (!_propertyResolvers.ContainsKey(type)) {

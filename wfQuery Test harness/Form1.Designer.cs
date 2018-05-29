@@ -33,6 +33,10 @@
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.progressBar1 = new System.Windows.Forms.ProgressBar();
 			this.panel2 = new System.Windows.Forms.Panel();
+			this.OffClickButton = new System.Windows.Forms.Button();
+			this.OnClickButton = new System.Windows.Forms.Button();
+			this.RemoveControlButton = new System.Windows.Forms.Button();
+			this.AddControlButton = new System.Windows.Forms.Button();
 			this.EachButton = new System.Windows.Forms.Button();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.AttrValueTextBox = new System.Windows.Forms.TextBox();
@@ -52,12 +56,10 @@
 			this.QueryElementCountLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.progressBar2 = new System.Windows.Forms.ProgressBar();
 			this.progressBar3 = new System.Windows.Forms.ProgressBar();
-			this.AddControlButton = new System.Windows.Forms.Button();
-			this.RemoveControlButton = new System.Windows.Forms.Button();
 			this.DynamicControlPanel = new System.Windows.Forms.Panel();
 			this.label7 = new System.Windows.Forms.Label();
-			this.OnClickButton = new System.Windows.Forms.Button();
-			this.OffClickButton = new System.Windows.Forms.Button();
+			this.button2 = new System.Windows.Forms.Button();
+			this.button3 = new System.Windows.Forms.Button();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.panel3.SuspendLayout();
@@ -147,6 +149,8 @@
 			// 
 			// panel2
 			// 
+			this.panel2.Controls.Add(this.button3);
+			this.panel2.Controls.Add(this.button2);
 			this.panel2.Controls.Add(this.OffClickButton);
 			this.panel2.Controls.Add(this.OnClickButton);
 			this.panel2.Controls.Add(this.RemoveControlButton);
@@ -159,8 +163,48 @@
 			this.panel2.Controls.Add(this.label2);
 			this.panel2.Location = new System.Drawing.Point(491, 24);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(297, 326);
+			this.panel2.Size = new System.Drawing.Size(297, 463);
 			this.panel2.TabIndex = 7;
+			// 
+			// OffClickButton
+			// 
+			this.OffClickButton.Location = new System.Drawing.Point(101, 152);
+			this.OffClickButton.Name = "OffClickButton";
+			this.OffClickButton.Size = new System.Drawing.Size(75, 23);
+			this.OffClickButton.TabIndex = 7;
+			this.OffClickButton.Text = ".Off(\"click\")";
+			this.OffClickButton.UseVisualStyleBackColor = true;
+			this.OffClickButton.Click += new System.EventHandler(this.OffClickButton_Click);
+			// 
+			// OnClickButton
+			// 
+			this.OnClickButton.Location = new System.Drawing.Point(205, 152);
+			this.OnClickButton.Name = "OnClickButton";
+			this.OnClickButton.Size = new System.Drawing.Size(75, 23);
+			this.OnClickButton.TabIndex = 8;
+			this.OnClickButton.Text = ".On(\"click\")";
+			this.OnClickButton.UseVisualStyleBackColor = true;
+			this.OnClickButton.Click += new System.EventHandler(this.OnClickButton_Click);
+			// 
+			// RemoveControlButton
+			// 
+			this.RemoveControlButton.Location = new System.Drawing.Point(205, 123);
+			this.RemoveControlButton.Name = "RemoveControlButton";
+			this.RemoveControlButton.Size = new System.Drawing.Size(75, 23);
+			this.RemoveControlButton.TabIndex = 6;
+			this.RemoveControlButton.Text = "- Control";
+			this.RemoveControlButton.UseVisualStyleBackColor = true;
+			this.RemoveControlButton.Click += new System.EventHandler(this.RemoveControlButton_Click);
+			// 
+			// AddControlButton
+			// 
+			this.AddControlButton.Location = new System.Drawing.Point(124, 123);
+			this.AddControlButton.Name = "AddControlButton";
+			this.AddControlButton.Size = new System.Drawing.Size(75, 23);
+			this.AddControlButton.TabIndex = 5;
+			this.AddControlButton.Text = "+ Control";
+			this.AddControlButton.UseVisualStyleBackColor = true;
+			this.AddControlButton.Click += new System.EventHandler(this.AddControlButton_Click);
 			// 
 			// EachButton
 			// 
@@ -303,7 +347,7 @@
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.QueryElementCountLabel});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 371);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 490);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(800, 22);
 			this.statusStrip1.TabIndex = 9;
@@ -337,26 +381,6 @@
 			this.progressBar3.TabIndex = 7;
 			this.progressBar3.Value = 65;
 			// 
-			// AddControlButton
-			// 
-			this.AddControlButton.Location = new System.Drawing.Point(124, 123);
-			this.AddControlButton.Name = "AddControlButton";
-			this.AddControlButton.Size = new System.Drawing.Size(75, 23);
-			this.AddControlButton.TabIndex = 5;
-			this.AddControlButton.Text = "+ Control";
-			this.AddControlButton.UseVisualStyleBackColor = true;
-			this.AddControlButton.Click += new System.EventHandler(this.AddControlButton_Click);
-			// 
-			// RemoveControlButton
-			// 
-			this.RemoveControlButton.Location = new System.Drawing.Point(205, 123);
-			this.RemoveControlButton.Name = "RemoveControlButton";
-			this.RemoveControlButton.Size = new System.Drawing.Size(75, 23);
-			this.RemoveControlButton.TabIndex = 6;
-			this.RemoveControlButton.Text = "- Control";
-			this.RemoveControlButton.UseVisualStyleBackColor = true;
-			this.RemoveControlButton.Click += new System.EventHandler(this.RemoveControlButton_Click);
-			// 
 			// DynamicControlPanel
 			// 
 			this.DynamicControlPanel.Controls.Add(this.label7);
@@ -377,31 +401,30 @@
 			this.label7.Text = "Dynamic Controls";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// OnClickButton
+			// button2
 			// 
-			this.OnClickButton.Location = new System.Drawing.Point(205, 152);
-			this.OnClickButton.Name = "OnClickButton";
-			this.OnClickButton.Size = new System.Drawing.Size(75, 23);
-			this.OnClickButton.TabIndex = 8;
-			this.OnClickButton.Text = ".On(\"click\")";
-			this.OnClickButton.UseVisualStyleBackColor = true;
-			this.OnClickButton.Click += new System.EventHandler(this.OnClickButton_Click);
+			this.button2.Location = new System.Drawing.Point(14, 331);
+			this.button2.Name = "button2";
+			this.button2.Size = new System.Drawing.Size(75, 23);
+			this.button2.TabIndex = 10;
+			this.button2.Text = ".Attr";
+			this.button2.UseVisualStyleBackColor = true;
+			this.button2.Click += new System.EventHandler(this.button2_Click);
 			// 
-			// OffClickButton
+			// button3
 			// 
-			this.OffClickButton.Location = new System.Drawing.Point(101, 152);
-			this.OffClickButton.Name = "OffClickButton";
-			this.OffClickButton.Size = new System.Drawing.Size(75, 23);
-			this.OffClickButton.TabIndex = 7;
-			this.OffClickButton.Text = ".Off(\"click\")";
-			this.OffClickButton.UseVisualStyleBackColor = true;
-			this.OffClickButton.Click += new System.EventHandler(this.OffClickButton_Click);
+			this.button3.Location = new System.Drawing.Point(205, 331);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size(75, 23);
+			this.button3.TabIndex = 11;
+			this.button3.Text = ".Prop";
+			this.button3.UseVisualStyleBackColor = true;
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(800, 393);
+			this.ClientSize = new System.Drawing.Size(800, 512);
 			this.Controls.Add(this.DynamicControlPanel);
 			this.Controls.Add(this.progressBar3);
 			this.Controls.Add(this.progressBar2);
@@ -467,6 +490,8 @@
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Button OnClickButton;
 		private System.Windows.Forms.Button OffClickButton;
+		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.Button button2;
 	}
 }
 
