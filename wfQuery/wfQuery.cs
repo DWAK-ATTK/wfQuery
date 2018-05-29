@@ -153,7 +153,7 @@ namespace wfQuery {
 		public wfQueryControlSelectorResult this[Control control] {
 			get {
 				return new wfQueryControlSelectorResult(this, new List<Control>() { control });
-			}
+			} 
 		}
 
 
