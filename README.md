@@ -90,5 +90,5 @@ wfQuery sports a shiney fluent API model.  For instance:
 ### Now what?
 Well, now I'll continue to work on this project in my spare time.  I have a ton of improvements in mind and will take them one at a time.  
 I welcome all constructive criticism and feedback.  Feature requests will be taken - but I make no guarantees about if or when I can fulfil 
-them.  This is open source, so please feel free to send me pull requests.  This is also my first GitHub-hosted project.  I've never run an 
+them.  *This is open source, so please feel free to send me pull requests*.  This is also my first GitHub-hosted project.  I've never run an 
 open source project before.  So that aspect is quite new to me.  I welcome input on that as well.
