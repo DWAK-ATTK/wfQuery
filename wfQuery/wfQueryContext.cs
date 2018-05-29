@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace wfQuery {
-	public class wfQuery {
+	public class wfQueryContext {
 
 		internal event EventHandler<ControlEventArgs> ControlAdded;
 		internal event EventHandler<ControlEventArgs> ControlRemoved;
@@ -13,7 +13,7 @@ namespace wfQuery {
 		protected Control _control = null;
 		protected Dictionary<Type, IPropertyResolver> _propertyResolvers = new Dictionary<Type, IPropertyResolver>();
 
-		public wfQuery(Control control) : base() {
+		public wfQueryContext(Control control) : base() {
 			_control = control ?? throw new NullReferenceException("control can not be null.");
 
 			HookupControlEvents(_control);

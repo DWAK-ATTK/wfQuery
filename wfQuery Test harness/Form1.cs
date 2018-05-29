@@ -13,16 +13,16 @@ using wfQuery;
 namespace wfQuery_Test_harness {
 	public partial class Form1 : Form {
 
-		wfQuery.wfQuery _ = null;
+		wfQueryContext _ = null;
 
 		public Form1() {
 			InitializeComponent();
-			_ = new wfQuery.wfQuery(this);
+			_ = new wfQueryContext(this);
 			ReflectionCachePropertyResolver resolver = new ReflectionCachePropertyResolver();
 			resolver.CacheStructure<CheckBox>();
 			resolver.CacheStructure<TextBox>();
 			resolver.CacheStructure<Button>();
-			wfQuery.wfQuery.DefaultPropertyResolver = resolver;
+			wfQueryContext.DefaultPropertyResolver = resolver;
 		}
 
 		private void QueryTestRedButton_Click(object sender, EventArgs e) {

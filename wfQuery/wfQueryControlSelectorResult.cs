@@ -7,10 +7,10 @@ using System.Windows.Forms;
 namespace wfQuery {
 	public class wfQueryControlSelectorResult {
 
-		protected wfQuery _wfQuery = null;
+		protected wfQueryContext _wfQuery = null;
 		protected LinkedList<Control> _results = new LinkedList<Control>();
 
-		internal wfQueryControlSelectorResult(wfQuery wfQuery) : base() {
+		internal wfQueryControlSelectorResult(wfQueryContext wfQuery) : base() {
 			_wfQuery = wfQuery;
 
 			_wfQuery.Control.ControlAdded += Control_ControlAdded;
@@ -20,7 +20,7 @@ namespace wfQuery {
 			throw new NotImplementedException();
 		}
 
-		internal wfQueryControlSelectorResult(wfQuery wfQuery, List<Control> results) : this(wfQuery) {
+		internal wfQueryControlSelectorResult(wfQueryContext wfQuery, List<Control> results) : this(wfQuery) {
 			results.ForEach(c => _results.AddLast(c));
 		}
 
@@ -152,7 +152,7 @@ namespace wfQuery {
 
 				List<Control> result = new List<Control>();
 				foreach (Control control in Results) {
-					result.AddRange(wfQuery.QuerySelection(control, selector));
+					result.AddRange(wfQueryContext.QuerySelection(control, selector));
 				}
 				return new wfQueryControlSelectorResult(_wfQuery, result);
 			}
