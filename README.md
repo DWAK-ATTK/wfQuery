@@ -73,6 +73,20 @@ the included `ReflectionCachePropertyResolver` caches any uncached Type structur
 requests for a property on that Type are fulfilled from the cache.  This Property Resolver trades memory for cpu time.
 
 
+### Fluent API
+wfQuery sports a shiney fluent API model.  For instance:  
+
+	//	Select all TextBoxes except for the one named "textBox2".
+	//	Set all items background color to Blue
+	//  Add a click event handler that will change the clicked item's background color to Red.
+	_[".TextBox"]
+	.Not("#textBox2")
+	.Attr("BackColor", Color.Blue)
+	.On("Click", (s, args) => {
+		_[s].Attr("BackColor", Color.Red);
+	});
+	
+
 ### Now what?
 Well, now I'll continue to work on this project in my spare time.  I have a ton of improvements in mind and will take them one at a time.  
 I welcome all constructive criticism and feedback.  Feature requests will be taken - but I make no guarantees about if or when I can fulfil 
