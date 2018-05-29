@@ -96,6 +96,11 @@ namespace wfQuery_Test_harness {
 			_[".TextBox"]
 			.Attr("BackColor", Color.SkyBlue)
 			.On("Click", new EventHandler(clickHandler));
+
+			_[".Button"]
+			.On("Click", (s, args) => {
+				((Control)s).BackColor = Color.Green;
+			});
 		}
 
 
