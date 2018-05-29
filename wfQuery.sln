@@ -5,7 +5,12 @@ VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wfQuery Test harness", "wfQuery Test harness\wfQuery Test harness.csproj", "{2DA86B7A-CB3D-4901-A262-F0FE56FE4CC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wfQuery", "wfQuery\wfQuery.csproj", "{04D1BBC2-3CF5-4B2F-BBA7-901740E5FD0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wfQuery", "wfQuery\wfQuery.csproj", "{04D1BBC2-3CF5-4B2F-BBA7-901740E5FD0E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{51BD11D0-75EF-449F-B380-3BD305AD9117}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
