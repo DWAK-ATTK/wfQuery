@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace wfQuery {
@@ -14,7 +16,7 @@ namespace wfQuery {
 		protected Control _control = null;
 		protected Dictionary<Type, IPropertyResolver> _propertyResolvers = new Dictionary<Type, IPropertyResolver>();
 
-		
+
 
 		public wfQueryContext(Control control) : base() {
 			_control = control ?? throw new NullReferenceException("control can not be null.");
@@ -28,7 +30,7 @@ namespace wfQuery {
 			parent.ControlAdded += _control_ControlAdded;
 			parent.ControlRemoved += _control_ControlRemoved;
 
-			foreach(Control control in parent.Controls) {
+			foreach (Control control in parent.Controls) {
 				HookupControlEvents(control);
 			}
 		}
@@ -54,7 +56,7 @@ namespace wfQuery {
 		private void _control_ControlAdded(object sender, ControlEventArgs e) {
 			HookupControlEvents(e.Control);
 			ControlAdded?.Invoke(_control, e);
-			
+
 		}
 
 
@@ -94,6 +96,7 @@ namespace wfQuery {
 
 		internal static List<Control> QuerySelection(Control parent, string query) {
 			string[] selectors = query.Split(new char[] { ',' }); //	TODO: Replace this with output from a real query parser
+			selectors = selectors.Select(s => s.Trim()).ToArray();
 			return QuerySelection(parent, selectors);
 		}
 
@@ -107,6 +110,16 @@ namespace wfQuery {
 			List<Control> targets = new List<Control>();
 			targets.Add(parent);
 			foreach (Control control in parent.Controls) { targets.Add(control); }
+
+			if (selectors.Contains("*") && 1 < targets.Count) {
+				for (int index = 1; index < targets.Count; index++) {
+					controls.Add(targets[index]);
+					controls.AddRange(
+						QuerySelection(targets[index], new string[] { "*" })
+					);
+				}
+				return controls;
+			}
 
 			for (int index = 0; index < selectors.Length; index++) {
 				string selector = selectors[index].Trim();
@@ -161,13 +174,21 @@ namespace wfQuery {
 		public wfQueryControlSelectorResult this[Control control] {
 			get {
 				return new wfQueryControlSelectorResult(this, new List<Control>() { control });
-			} 
+			}
 		}
 
 
 
 		public Control Control {
 			get { return _control; }
+		}
+
+
+
+		public string Version {
+			get {
+				return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+			}
 		}
 
 	}

@@ -9,19 +9,69 @@ namespace wfQuery {
 
 		protected wfQueryContext _wfQuery = null;
 		protected LinkedList<Control> _results = new LinkedList<Control>();
+		protected wfQueryControlSelectorResult _previousResults = null;
 
 		internal wfQueryControlSelectorResult(wfQueryContext wfQuery) : base() {
 			_wfQuery = wfQuery;
-
-			_wfQuery.Control.ControlAdded += Control_ControlAdded;
-		}
-
-		private void Control_ControlAdded(object sender, ControlEventArgs e) {
-			throw new NotImplementedException();
 		}
 
 		internal wfQueryControlSelectorResult(wfQueryContext wfQuery, List<Control> results) : this(wfQuery) {
 			results.ForEach(c => _results.AddLast(c));
+		}
+
+		internal wfQueryControlSelectorResult(wfQueryContext wfQuery, List<Control> results, wfQueryControlSelectorResult previousResults) : this(wfQuery) {
+			_previousResults = previousResults;
+			results.ForEach(c => _results.AddLast(c));
+		}
+
+
+
+		public wfQueryControlSelectorResult End() {
+			return _previousResults ?? this;
+		}
+
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index">positive numbers (and zero) count from the beginning of the results; negative numbers count from the end.</param>
+		/// <returns></returns>
+		public wfQueryControlSelectorResult Eq(int index) {
+			wfQueryControlSelectorResult result = null;
+			int offsetIndex = Math.Abs(index);
+			if (offsetIndex < Length ) {
+				if (index < 0) {
+					//	count from end
+					result =
+						new wfQueryControlSelectorResult(_wfQuery, Results.Reverse().Skip(offsetIndex).Take(1).ToList(), this);
+				} else {
+					//	count from beginning
+					result = 
+						new wfQueryControlSelectorResult(_wfQuery, Results.Skip(index).Take(1).ToList(), this);
+				}
+				return result;
+			}
+
+			return null;
+		}
+
+
+
+		public wfQueryControlSelectorResult First() {
+			return Eq(0);
+		}
+
+
+
+		public wfQueryControlSelectorResult Last() {
+			return Eq(-(Length - 1));
+		}
+
+
+
+		public List<Control> Get() {
+			return Results.ToList();
 		}
 
 
@@ -130,6 +180,29 @@ namespace wfQuery {
 			return this;
 		}
 
+
+
+		public wfQueryControlSelectorResult Data<T>(string name, T value) {
+			if (0 == Length) { return this; }
+			IAttributeProvider provider = wfQueryContext.DefaultAttributeProvider;
+
+			Attr("data-" + name, value);
+
+			return this;
+		}
+
+		public wfQueryControlSelectorResult Data<T>(string name, Func<int, Control, T> func) {
+			if (0 == Length) { return this; }
+			IAttributeProvider provider = wfQueryContext.DefaultAttributeProvider;
+			LinkedListNode<Control> node = Results.First;
+
+			Attr("data-" + name, func);
+
+			return this;
+		}
+
+
+
 		/// <summary>
 		/// Sets the property value.  If property can not be found, sets the attribute value.
 		/// </summary>
@@ -188,9 +261,7 @@ namespace wfQuery {
 
 
 
-		//private List<EventHandler> _onActions = new List<EventHandler>();
 		public wfQueryControlSelectorResult On(string eventName, EventHandler action) {
-			//_onActions.Add(action);
 			if (0 == Length) { return this; }
 			foreach (Control item in Results) {
 				typeof(Control).GetEvent(eventName).AddEventHandler(item, action);

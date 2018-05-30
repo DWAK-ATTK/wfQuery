@@ -126,6 +126,8 @@ namespace wfQuery_Test_harness {
 					+ ": " + _[c].Attr("is-alaska").ToString()
 					+ "\\" + c.Name + "\r\n";
 				});
+
+			var all = _[".TextBox, *"];
 			MessageBox.Show(result);
 		}
 
