@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -152,6 +153,23 @@ namespace wfQuery {
 			}
 
 			return controls;
+		}
+
+
+
+		public List<Control> Unique(IEnumerable<Control> controls) {
+			List<Control> result = controls.Distinct().ToList();
+			return result;
+		}
+
+
+
+		public List<Control> UniqueSort<T, TMember>(IEnumerable<Control> controls, Expression<Func<T, TMember>> expression) {
+			throw new NotImplementedException();
+			List<Control> result = Unique(controls);
+			//	TODO: invoke the expression to do sorting.
+
+			return result;
 		}
 
 
